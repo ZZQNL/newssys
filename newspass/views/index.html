@@ -1,0 +1,85 @@
+
+<div class="main_body" id="main_body">
+    <div class="breadcrub">
+        当前位置：文章管理>文章列表
+    </div>
+    <div class="pannel">
+        <span class="sel_label">请选择文章分类：</span>
+        {{/*!!!!!!!!!!!!注意!!!!!!!!!!!!!!!!!!!!!!!!!!!!这里使用的是get请求!!!!!!!!!!!!!!!!!!!!!*/}}
+        <form action="/article/showArticleList" method="get" id="form">
+            <select name="select" id="select" class="sel_opt">
+            {{range .articleTypes}}
+                {{/*  $.typeName:后台给的数据; .TypeName:articleTypes的属性
+                    $符号可以强制表示后台传入的数据
+                    如果页面中选择的分类和后台传入的一样,则显示正常,否则显示页面选择的
+                */}}
+                {{if compare .Typename $.typeName}}
+                    <option selected="true">{{.Typename}}</option>
+                {{else}}
+                    <option >{{.Typename}}</option>
+                {{end}}
+            {{end}}
+            </select>
+        </form>
+
+        <table class="common_table">
+            <tr>
+                <th width="43%">文章标题</th>
+                <th width="10%">文章内容</th>
+                <th width="16%">添加时间</th>
+                <th width="7%">阅读量</th>
+                <th width="7%">删除</th>
+                <th width="7%">编辑</th>
+                <th width="10%">文章类型</th>
+            </tr>
+
+{{/*        {{range $index,$value := .articles}}*/}}
+{{/*            <tr>*/}}
+{{/*                <td>{{$value.Title}}</td>*/}}
+{{/*                <td><a href="/article/showArticleDetail?id={{$value.Id}}">查看详情</a></td>*/}}
+{{/*                <td>{{$value.Time.Format "2006-01-02-15:04:05"}}</td>*/}}
+{{/*                <td>{{$value.Count}}</td>*/}}
+{{/*                <td><a href="/article/delArticle?id={{$value.Id}}" class="dels">删除</a></td>*/}}
+{{/*                <td><a href="/article/showUpdate?id={{$value.Id}}">编辑</a></td>*/}}
+{{/*                <td>{{$value.ArtType}}</td>*/}}
+{{/*                <td>{{$value.ArtType}}</td>*/}}
+{{/*            </tr>*/}}
+{{/*        {{end}}*/}}
+            {{range .articles}}
+                <tr>
+                    <td>{{.Title}}</td>
+                    <td><a href="/article/showArticleDetail?id={{.Id}}">查看详情</a></td>
+                    <td>{{.Time.Format "2006-01-02-15:04:05"}}</td>
+                    <td>{{.Count}}</td>
+                    <td><a href="/article/delArticle?id={{.Id}}" class="dels">删除</a></td>
+                    <td><a href="/article/showUpdate?id={{.Id}}">编辑</a></td>
+                    {{/*                <td>{{$value.ArtType}}</td>*/}}
+                    <td>{{.ArtType.Typename}}</td>
+                </tr>
+            {{end}}
+        </table>
+
+        <ul class="pagenation">
+{{/*            <li><a href="/article/showArticleList?pageIndex=1">首页</a></li>*/}}
+{{/*            <li><a href="/article/showArticleList?pageIndex={{.pageIndex | prePage }}">上一页 </a></li>*/}}
+{{/*            <li><a href="/article/showArticleList?pageIndex={{nextPage .pageIndex .pageCounts}}">下一页</a></li>*/}}
+{{/*            <li><a href="/article/showArticleList?pageIndex={{.pageCounts}}">末页</a></li>*/}}
+{{/*            <li>共{{.count}}条记录/共{{.pageCounts}}页/当前{{.pageIndex}}页</li>*/}}
+            <li><a href="/article/showArticleList?pageIndex=1">首页</a></li>
+            {{if compare .pageFirst true}}
+                <li>上一页</li>
+            {{else}}
+                <li><a href="/article/showArticleList?pageIndex={{.pageIndex | prePage }}&select={{.typeName}}">上一页 </a></li>
+            {{end}}
+            {{if compare .pageEnd true}}
+                <li>下一页</li>
+            {{else}}
+                <li><a href="/article/showArticleList?pageIndex={{.pageIndex | nextPage }}&select={{.typeName}}">下一页</a></li>
+            {{end}}
+            <li><a href="/article/showArticleList?pageIndex={{.pageCounts}}">末页</a></li>
+            <li>共{{.count}}条记录/共{{.pageCounts}}页/当前{{.pageIndex}}页</li>
+
+        </ul>
+    </div>
+</div>
+
